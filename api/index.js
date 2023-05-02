@@ -65,12 +65,14 @@ app.post("/api/register", async (req, res) => {
     });
 
     try {
+        if (await User.findOne({ username })) throw new Error();
+
         await user.save();
         const token = jwt.sign({ username: user.username, admin: user.admin }, process.env.JWT_SECRET);
         res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true });
         res.json({ token, success: true });
     } catch (err) {
-        res.status(400).json({ error: "Username already taken" });
+        res.status(409).json({ error: "Username already taken" });
     }
 });
 
