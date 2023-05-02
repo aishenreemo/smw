@@ -1,0 +1,54 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+    border-radius: 1em;
+    border: 1px solid black;
+}
+
+/* Style the header */
+.form h2 {
+    font-size: 32px;
+    margin-bottom: 0.5em;
+}
+
+/* Style the input fields */
+.form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 0.5em;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form > .button-div {
+    width: 50%;
+}
+
+.form button {
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    width: 100%;
+}
+
+/* Style the submit button */
+.form button[type=submit] {
+    background-color: #4CAF50;
+}
+
+/* Style the register button */
+.form button[type=button] {
+    background-color: #2196F3;
+}
+
+/* Style the error message */
+.form #login-error {
+    margin-bottom: 0.5em;
+}
+

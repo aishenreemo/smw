@@ -5,16 +5,17 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="styles/global.css" rel="stylesheet">
+        <link href="styles/form.css" rel="stylesheet">
         <script type="module" src="scripts/register.js" defer></script>
     </head>
-    <body>
-        <form id="register" method="post">
+    <body class="flex">
+        <form id="register" class="form" method="post">
             <h2>REGISTER</h2>
             <div id="register-error" style="color: red;"></div>
             <div><input type="text" name="username" placeholder="Username" required></div>
             <div><input type="password" name="password" placeholder="Password" required></div>
-            <div><button type="submit">Register</button></div>
-            <div><button type="button" onclick="window.location.href = '/'">Login</button></div>
+            <div class="button-div"><button type="submit">Register</button></div>
+            <div class="button-div"><button type="button" onclick="window.location.href = '/'">Login</button></div>
         </form>
     </body>
 </html>
