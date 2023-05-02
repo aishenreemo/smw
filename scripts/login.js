@@ -20,8 +20,9 @@ loginForm.addEventListener("submit", async (event) => {
         });
 
         if (response.ok) {
-            window.location.href = "/dashboard.html";
-            return;
+            const data = await response.json();
+            localStorage.setItem("token", data.token);
+            window.location.href = "/dashboard/index.html";
         } else {
             const data = await response.json();
             loginErrorMessage.textContent = data.error;
