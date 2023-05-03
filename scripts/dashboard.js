@@ -21,6 +21,17 @@ document.getElementById("logout").addEventListener("click", async () => {
     }
 });
 
+document.getElementById("menu").addEventListener("click", async () => {
+    const options = document.querySelector(".menu > .options");
+
+    if (options.classList.contains("invisible")) {
+        options.classList.remove("invisible");
+    } else {
+        options.classList.add("invisible");
+    }
+
+});
+
 window.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
 
@@ -35,8 +46,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         });
 
         const data = await response.json();
-
-        document.getElementById("is-admin").textContent = data.user.admin ? "im an admin" : "im a viewer";
+        // do something to data
     } catch (err) {
         console.error(err);
     }

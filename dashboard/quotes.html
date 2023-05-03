@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Motivation Web Portal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="../styles/global.css" rel="stylesheet">
+        <link href="../styles/quotes.css" rel="stylesheet">
+        <script type="module" src="../scripts/quotes.js" defer></script>
+    </head>
+    <body>
+        <img src="../images/background.png" class="background unselectable">
+        <div class="home">
+            <div><button type="button" class="material-icons" onclick="window.location.href = 'index.html'"></button></div>
+        </div>
+        <div class="search">
+            <input type="search" placeholder="search for anything">
+            <button type="button" onclick="search()" class="material-icons"></button>
+        </div>
+        <div class="title">QUOTES</div>
+        <div class="main">
+            <img src="../images/happy_emoji.jpg" class="selected-image invisible">
+            <button type="button" class="add invisible material-icons"></button>
+            <form method="post">
+                <textarea name="text" required></textarea>
+                <button type="submit">Add</button>
+            </form>
+            <div class="content">Hey how are you feeling today?</div>
+            <div class="choices">
+                <button onclick="select(0)"><img class="unselectable" src="../images/happy_emoji.jpg"></button>
+                <button onclick="select(1)"><img class="unselectable" src="../images/sad_emoji.jpg"></button>
+                <button onclick="select(2)"><img class="unselectable" src="../images/angry_emoji.jpg"></button>
+                <button onclick="select(3)"><img class="unselectable" src="../images/neutral_emoji.jpg"></button>
+            </div>
+            <div class="content">Please Choose</div>
+            <div class="container invisible"></div>
+        </div>
+    </body>
+</html>

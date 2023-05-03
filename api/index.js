@@ -28,12 +28,18 @@ mongoose.connect(process.env.MONGODB_URL, {
     console.error(err);
 });
 
+const quoteSchema = new mongoose.Schema({
+    text: { type: String, required: true },
+    emotion: { type: Number, required: true }
+});
+
 const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     admin: { type: Boolean, default: false }
 });
 
+const Quote = mongoose.model("Quote", quoteSchema);
 const User = mongoose.model("User", userSchema);
 
 app.post("/api/login", async (req, res) => {
@@ -79,6 +85,45 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/logout", async (_, res) => {
     res.clearCookie("token", { httpOnly: true, sameSite: true });
     res.json({ success: true });
+});
+
+app.post("/api/add_quote", async (req, res) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: "Authorization token missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded.admin) {
+            return res.status(403).json({ error: "Invalid authorization token" });
+        }
+
+        const { text, emotion } = req.body;
+        const quote = new Quote({
+            text,
+            emotion,
+        });
+
+        await quote.save();
+        res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(401).json({ error: "Invalid authorization token" });
+    }
+});
+
+app.get("/api/list_quotes/:emotion", async (req, res) => {
+    const emotion = req.params.emotion;
+
+    res.json(await Quote.find({ emotion }));
+});
+
+app.post("/delete_quote", async (req, res) => {
+    await Quote.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+    res.send({ success: true });
 });
 
 app.get("/api/me", async (req, res) => {

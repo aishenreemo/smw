@@ -5,15 +5,38 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="../styles/global.css" rel="stylesheet">
+        <link href="../styles/dashboard.css" rel="stylesheet">
         <script type="module" src="../scripts/dashboard.js" defer></script>
     </head>
     <body>
-        <div id="is-admin"></div>
-        <button type="button">QUOTES</button>
-        <button type="button">MUSICS</button>
-        <button type="button">VIDEOS</button>
-        <button type="button">PAMPLETS</button>
-        <button type="button">Most Viewed Content</button>
-        <button type="button" id="logout">Logout</button>
+        <img src="../images/background.png" class="background unselectable">
+        <div class="menu">
+            <div><button id="menu" type="button" class="material-icons"></button></div>
+            <div class="options invisible">
+                <button type="button" id="logout">Logout</button>
+            </div>
+        </div>
+        <div class="search">
+            <input type="search" placeholder="search for anything">
+            <button type="button" onclick="search()" class="material-icons"></button>
+        </div>
+        <div class="nav">
+            <a href="quotes.html">QUOTES</a>
+            <a href="musics.html">MUSICS</a>
+            <a href="videos.html">VIDEOS</a>
+            <a href="pamphlets.html">PAMPHLETS</a>
+        </div>
+        <div class="main">
+            <div class="title">
+                MOTIVATIONAL CRAFT
+            </div>
+            <div class="content">
+                <textarea readonly>"I-WORD"</textarea>
+                <button type="button" class="invisible" onclick="edit()">edit</button>
+            </div>
+            <div class="most-viewed">
+                <a href="most_viewed.html">Most Viewed Content</a>
+            </div>
+        </div>
     </body>
 </html>

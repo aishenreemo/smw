@@ -1,0 +1,108 @@
+body {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 1fr 6fr;
+}
+
+.menu button {
+    font-size: 16pt;
+}
+
+.menu > div:not(.options) {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+    justify-items: start;
+    align-items: center;
+}
+
+.menu > div.options {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: 1px solid black;
+    background-color: white;
+}
+
+.menu > div.options > button {
+    width: 100%;
+}
+
+button#menu {
+    border-radius: 0.5em;
+    border: 1px solid black;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    padding: 1em;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    width: 70%;
+    justify-self: center;
+}
+
+.search input {
+    width: 90%;
+    padding: 0.5em;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1em;
+    gap: 1em;
+}
+
+.main .title {
+    font-weight: bold;
+    font-size: 28pt;
+    background-color: #0084FF;
+    text-align: center;
+    padding: 0.5em;
+    width: 70%;
+}
+
+.main .content {
+    background-color: #0084FF;
+    padding: 0.5em;
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.main .content textarea {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 14pt;
+    font-style: italic;
+    vertical-align: center;
+    padding: 0.5em;
+}
+
+.main .most-viewed {
+    align-self: end;
+}
+
+.main .most-viewed a {
+    background-color: #CE4727;
+}
+
