@@ -5,12 +5,14 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import multer from "multer";
 
 const ADMINS = ["aishen", "admin"];
 
 dotenv.config();
 
 const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(bodyParser.json());
 app.use(cors({
@@ -39,8 +41,13 @@ const userSchema = new mongoose.Schema({
     admin: { type: Boolean, default: false }
 });
 
+const imageSchema = new mongoose.Schema({
+    data: Buffer
+});
+
 const Quote = mongoose.model("Quote", quoteSchema);
 const User = mongoose.model("User", userSchema);
+const Image = mongoose.model("Image", imageSchema);
 
 app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
@@ -115,14 +122,49 @@ app.post("/api/add_quote", async (req, res) => {
     }
 });
 
+app.post("/api/add_pamphlet", upload.single("image"), async (req, res) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: "Authorization token missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded.admin) {
+            return res.status(403).json({ error: "Invalid authorization token" });
+        }
+
+        const imageData = req.file.buffer;
+        const image = new Image({ data: imageData });
+
+        await image.save();
+
+        res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(401).json({ error: "Invalid authorization token" });
+    }
+});
+
+app.get("/api/list_pamphlets", async (_, res) => {
+    res.json(await Image.find({}));
+});
+
 app.get("/api/list_quotes/:emotion", async (req, res) => {
     const emotion = req.params.emotion;
 
     res.json(await Quote.find({ emotion }));
 });
 
-app.post("/delete_quote", async (req, res) => {
+app.post("/api/delete_quote", async (req, res) => {
     await Quote.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+    res.send({ success: true });
+});
+
+app.post("/api/delete_pamphlet", async (req, res) => {
+    await Image.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
     res.send({ success: true });
 });
 

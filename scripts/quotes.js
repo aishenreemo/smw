@@ -39,7 +39,7 @@ function generateButtonListener(imgIndex) {
 
 function generateDeleteListener(id) {
     return async () => {
-        await fetch("http://localhost:5000/delete_quote", {
+        await fetch("http://localhost:5000/api/delete_quote", {
             method: "POST",
             headers: {
                 "Accept": "application/json",
@@ -72,7 +72,6 @@ window.select = async (imgIndex) => {
 
     const response = await fetch(`http://localhost:5000/api/list_quotes/${imgIndex}`);
     const data = await response.json();
-    console.log(data);
 
     for (const quote of data) {
         const div = document.createElement("div");

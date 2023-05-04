@@ -11,6 +11,7 @@ document.getElementById("logout").addEventListener("click", async () => {
 
         if (response.ok) {
             localStorage.removeItem("token");
+            localStorage.removeItem("data");
             window.location.href = "/index.html";
         } else {
             const data = await response.json();
@@ -38,16 +39,5 @@ window.addEventListener("DOMContentLoaded", async () => {
     if (!token) {
         window.location.href = "/index.html";
         return;
-    }
-
-    try {
-        const response = await fetch("http://localhost:5000/api/me", {
-            headers: { Authorization: token }
-        });
-
-        const data = await response.json();
-        // do something to data
-    } catch (err) {
-        console.error(err);
     }
 });
