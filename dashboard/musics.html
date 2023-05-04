@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="../styles/global.css" rel="stylesheet">
         <link href="../styles/musics.css" rel="stylesheet">
+        <script type="module" src="../scripts/musics.js" defer></script>
     </head>
     <body>
         <img src="../images/background.png" class="background unselectable">
@@ -17,9 +18,16 @@
             <button type="button" onclick="search()" class="material-icons"></button>
         </div>
         <div class="title">MUSICS</div>
-        <div class="main">
-            <button type="button" class="add material-icons"></button>
-            <div class="container"></div>
+        <button type="button" class="add material-icons"></button>
+        <div class="container"></div>
+        <div class="player">
+            <audio controls>
+                <source src="" type="audio/mp4">
+            </audio>
         </div>
+        <form method="post">
+            <input type="url" name="url" placeholder="https://youtube.com/">
+            <button type="submit">Add</button>
+        </form>
     </body>
 </html>

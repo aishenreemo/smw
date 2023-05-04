@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import multer from "multer";
+import youtubedl from "youtube-dl-exec";
 
 const ADMINS = ["aishen", "admin"];
 
@@ -41,6 +42,17 @@ const userSchema = new mongoose.Schema({
     admin: { type: Boolean, default: false }
 });
 
+const musicSchema = new mongoose.Schema({
+    link: { type: String, required: true },
+    title: { type: String, required: true },
+    duration: { type: Number, required: true },
+    url: { type: String, required: true },
+});
+
+const videoSchema = new mongoose.Schema({
+    link: { type: String, required: true },
+});
+
 const imageSchema = new mongoose.Schema({
     data: Buffer
 });
@@ -48,6 +60,8 @@ const imageSchema = new mongoose.Schema({
 const Quote = mongoose.model("Quote", quoteSchema);
 const User = mongoose.model("User", userSchema);
 const Image = mongoose.model("Image", imageSchema);
+const Music = mongoose.model("Music", musicSchema);
+const Video = mongoose.model("Video", videoSchema);
 
 app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
@@ -122,6 +136,41 @@ app.post("/api/add_quote", async (req, res) => {
     }
 });
 
+app.post("/api/add_music", async (req, res) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: "Authorization token missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded.admin) {
+            return res.status(403).json({ error: "Invalid authorization token" });
+        }
+
+        const { link } = req.body;
+        const { title, duration, formats } = await youtubedl(link, {
+            dumpSingleJson: true,
+            noWarnings: true,
+            noCallHome: true,
+            preferFreeFormats: true,
+            youtubeSkipDashManifest: true,
+            referer: "https://www.youtube.com/",
+        });
+
+        const url = formats.find(format => format.ext === 'm4a').url;
+        const music = new Music({ title, duration, link, url });
+
+        await music.save();
+        res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(401).json({ error: "Invalid authorization token" });
+    }
+});
+
 app.post("/api/add_pamphlet", upload.single("image"), async (req, res) => {
     const token = req.headers.authorization;
 
@@ -148,6 +197,10 @@ app.post("/api/add_pamphlet", upload.single("image"), async (req, res) => {
     }
 });
 
+app.get("/api/list_musics", async (_, res) => {
+    res.json(await Music.find({}));
+});
+
 app.get("/api/list_pamphlets", async (_, res) => {
     res.json(await Image.find({}));
 });
@@ -160,6 +213,11 @@ app.get("/api/list_quotes/:emotion", async (req, res) => {
 
 app.post("/api/delete_quote", async (req, res) => {
     await Quote.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+    res.send({ success: true });
+});
+
+app.post("/api/delete_music", async (req, res) => {
+    await Music.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
     res.send({ success: true });
 });
 

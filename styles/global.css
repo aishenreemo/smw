@@ -62,7 +62,9 @@ button:active {
 input[type="text"],
 input[type="password"],
 input[type="search"],
+input[type="url"],
 input[type="email"] {
+    padding: 1em;
     border: none;
     border-bottom: 2px solid #ccc;
     transition: all 0.2s ease-in-out;
@@ -72,6 +74,7 @@ input[type="email"] {
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="search"]:focus,
+input[type="url"]:focus,
 input[type="email"]:focus {
     border-bottom: 2px solid #007bff;
 }
@@ -102,6 +105,26 @@ a:active {
 
 textarea {
     background-color: transparent;
+}
+
+audio {
+    outline: none;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    border: none;
+}
+
+audio::-webkit-media-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display {
+    color: #555;
+    font-size: 14px;
+    margin: 0 10px;
 }
 
 .material-icons {
