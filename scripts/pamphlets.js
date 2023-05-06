@@ -1,29 +1,33 @@
 const form = document.querySelector("form");
 const add = document.querySelector(".add");
 const image = document.querySelector(".container img");
-let images = [];
 let pointer = 0;
+let length = 0;
 
 add.addEventListener("click", () => form.style.display = "flex");
 
-document.getElementById("prev").addEventListener("click", () => {
-    if (images.length == 0) return;
+document.getElementById("prev").addEventListener("click", async () => {
+    if (length == 0) return;
 
-    pointer = pointer == 0 ? images.length - 1 : pointer - 1;
+    pointer = pointer == 0 ? length - 1 : pointer - 1;
 
-    const imageData = images[pointer];
-    image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData.data.data)}`;
+    const fetchedImage = await fetch("http://localhost:5000/api/get_pamphlet/" + pointer);
+    const fetchedJson = await fetchedImage.json();
+    const imageData = fetchedJson.data.data;
+    image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData)}`;
     image.dataset.id = imageData._id;
 });
 
-document.getElementById("next").addEventListener("click", () => {
-    if (images.length == 0) return;
+document.getElementById("next").addEventListener("click", async () => {
+    if (length == 0) return;
 
     pointer += 1;
-    pointer %= images.length;
+    pointer %= length;
 
-    const imageData = images[pointer];
-    image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData.data.data)}`;
+    const fetchedImage = await fetch("http://localhost:5000/api/get_pamphlet/" + pointer);
+    const fetchedJson = await fetchedImage.json();
+    const imageData = fetchedJson.data.data;
+    image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData)}`;
     image.dataset.id = imageData._id;
 });
 
@@ -67,13 +71,15 @@ form.addEventListener("submit", async (event) => {
 
 window.addEventListener("DOMContentLoaded", async () => {
     try {
-        const response = await fetch("http://localhost:5000/api/list_pamphlets");
-        images = await response.json();
+        const response = await fetch("http://localhost:5000/api/count_pamphlets");
+        length = await response.json();
 
-        if (images.length == 0) return;
+        if (length == 0) return;
 
-        const imageData = images[pointer];
-        image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData.data.data)}`;
+        const fetchedImage = await fetch("http://localhost:5000/api/get_pamphlet/" + pointer);
+        const fetchedJson = await fetchedImage.json();
+        const imageData = fetchedJson.data.data;
+        image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData)}`;
         image.dataset.id = imageData._id;
     } catch (err) {
         console.error(err);

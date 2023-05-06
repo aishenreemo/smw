@@ -243,8 +243,12 @@ app.get("/api/list_musics", async (_, res) => {
     res.json(await Music.find({}));
 });
 
-app.get("/api/list_pamphlets", async (_, res) => {
-    res.json(await Image.find({}));
+app.get("/api/get_pamphlet/:index", async (req, res) => {
+    res.json(await Image.findOne().skip(req.params.index).exec());
+});
+
+app.get("/api/count_pamphlets", async (_, res) => {
+    res.json(await Image.countDocuments());
 });
 
 app.get("/api/list_quotes/:emotion", async (req, res) => {
