@@ -40,4 +40,14 @@ window.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "/index.html";
         return;
     }
+
+    try {
+        const response = await fetch("http://localhost:5000/api/me", {
+            headers: { Authorization: token }
+        });
+
+        localStorage.setItem("user", JSON.stringify(await response.json()));
+    } catch (err) {
+        console.error(err);
+    }
 });

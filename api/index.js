@@ -51,6 +51,10 @@ const musicSchema = new mongoose.Schema({
 
 const videoSchema = new mongoose.Schema({
     link: { type: String, required: true },
+    title: { type: String, required: true },
+    duration: { type: Number, required: true },
+    videoId: { type: String, required: true },
+    thumbnail: { type: String, required: true },
 });
 
 const imageSchema = new mongoose.Schema({
@@ -151,7 +155,41 @@ app.post("/api/add_music", async (req, res) => {
         }
 
         const { link } = req.body;
-        const { title, duration, formats } = await youtubedl(link, {
+        const { title, duration, url } = await youtubedl(link, {
+            dumpSingleJson: true,
+            noWarnings: true,
+            noCallHome: true,
+            youtubeSkipDashManifest: true,
+            referer: "https://www.youtube.com/",
+            format: "m4a",
+        });
+
+        const music = new Music({ title, duration, link, url });
+
+        await music.save();
+        res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(401).json({ error: "Invalid authorization token" });
+    }
+});
+
+app.post("/api/add_video", async (req, res) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: "Authorization token missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded.admin) {
+            return res.status(403).json({ error: "Invalid authorization token" });
+        }
+
+        const { link } = req.body;
+        const { title, duration, thumbnail } = await youtubedl(link, {
             dumpSingleJson: true,
             noWarnings: true,
             noCallHome: true,
@@ -160,10 +198,10 @@ app.post("/api/add_music", async (req, res) => {
             referer: "https://www.youtube.com/",
         });
 
-        const url = formats.find(format => format.ext === 'm4a').url;
-        const music = new Music({ title, duration, link, url });
+        const videoId = new URL(link).searchParams.get("v");
+        const video = new Video({ title, duration, link, thumbnail, videoId });
 
-        await music.save();
+        await video.save();
         res.json({ success: true });
     } catch (err) {
         console.log(err);
@@ -197,6 +235,10 @@ app.post("/api/add_pamphlet", upload.single("image"), async (req, res) => {
     }
 });
 
+app.get("/api/list_videos", async (_, res) => {
+    res.json(await Video.find({}));
+});
+
 app.get("/api/list_musics", async (_, res) => {
     res.json(await Music.find({}));
 });
@@ -216,8 +258,36 @@ app.post("/api/delete_quote", async (req, res) => {
     res.send({ success: true });
 });
 
+app.post("/api/update_music", async (req, res) => {
+    const music = await Music.findOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+    let url = "";
+
+    if (music) {
+        let { formats } = await youtubedl(music.link, {
+            dumpSingleJson: true,
+            noWarnings: true,
+            noCallHome: true,
+            preferFreeFormats: true,
+            youtubeSkipDashManifest: true,
+            referer: "https://www.youtube.com/",
+        });
+
+        url = formats.find(f => f.ext == "m4a").url;
+        music.url = url;
+        await music.save();
+    }
+
+    res.json(url);
+});
+
 app.post("/api/delete_music", async (req, res) => {
     await Music.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+    res.send({ success: true });
+});
+
+
+app.post("/api/delete_video", async (req, res) => {
+    await Video.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
     res.send({ success: true });
 });
 

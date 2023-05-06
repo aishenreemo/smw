@@ -30,15 +30,6 @@ body {
     padding: 0.5em;
 }
 
-.main {
-    grid-column: 1 / 3;
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-
 .title {
     font-weight: bold;
     font-size: 28pt;
@@ -50,11 +41,7 @@ body {
     place-self: center;
 }
 
-.main .content {
-    font-size: 24pt;
-}
-
-.main .add {
+.add {
     position: absolute;
     top: 10%;
     left: 12%;
@@ -64,11 +51,86 @@ body {
     font-size: 50pt;
 }
 
-.main .container {
-    background-color: #0084FF;
-    width: 80%;
-    height: 85%;
+.container {
+    margin: 3em;
+    margin-bottom: 1em;
     border-radius: 0.5em;
     border: 1px solid black;
-    overflow-y: scroll;
+    background-color: #0084FF;
+    grid-column: 1 / 3;
+    padding: 1em;
+    display: grid;
+    place-items: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
 }
+
+.container iframe {
+    width: 640px;
+    height: 360px;
+    padding: 1em;
+    border-right: 1px solid black;
+    border-top: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+.container .list {
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    overflow-y: scroll;
+    height: 100%;;
+}
+
+.container .video {
+    display: flex;
+    gap: 0.5em;
+    height: 20%;
+}
+
+.container .video .play {
+    padding: 0em;
+    flex-grow: 1;
+    flex: 2;
+}
+
+.container .video .play img {
+    width: 100%;
+    margin: 0em;
+}
+
+.container .video :not(.title) {
+    align-self: center;
+}
+
+.container .video > .title {
+    flex-grow: 1;
+    text-align: center;
+    border-radius: 0.5em;
+    border: 1px solid black;
+    padding: 1em;
+    font-size: 10pt;
+    word-wrap: break-word;
+    flex: 4;
+}
+
+.container .list .video button:not(.play) {
+    flex: 1;
+}
+
+form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1em;
+    gap: 1em;
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: white;
+    border-radius: 0.5em;
+    border: 1px solid black;
+}
+

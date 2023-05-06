@@ -87,12 +87,7 @@ window.select = async (imgIndex) => {
         del.classList.add("material-icons");
         del.onclick = generateDeleteListener(quote._id);
 
-        const favorite = document.createElement("button");
-        favorite.textContent = '';
-        favorite.classList.add("material-icons");
-
         div.appendChild(child);
-        div.appendChild(favorite);
         div.appendChild(del);
         container.appendChild(div);
     }
