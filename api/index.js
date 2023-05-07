@@ -285,13 +285,13 @@ app.post("/api/add_view", async (req, res) => {
         await quote.save();
     } else if (req.body.type == "Video") {
         const video = await Video.findOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
-        video.views = (video.views ?? 0);
+        video.views = (video.views || 0);
         video.views += 1;
 
         await video.save();
     } else if (req.body.type == "Music") {
         const music = await Music.findOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
-        music.views = (music.views ?? 0);
+        music.views = (music.views || 0);
         music.views += 1;
 
         await music.save();
