@@ -7,6 +7,7 @@
         <link href="../styles/global.css" rel="stylesheet">
         <link href="../styles/dashboard.css" rel="stylesheet">
         <script type="module" src="../scripts/dashboard.js" defer></script>
+        <script type="module" src="../scripts/admin_only.js" defer></script>
     </head>
     <body>
         <img src="../images/background.png" class="background unselectable">
@@ -32,9 +33,8 @@
             </div>
             <div class="content">
                 <textarea readonly>"I-WORD"</textarea>
-                <button type="button" class="invisible" onclick="edit()">edit</button>
             </div>
-            <div class="most-viewed">
+            <div class="most-viewed admin-only">
                 <a href="most_viewed.html">Most Viewed Content</a>
             </div>
         </div>

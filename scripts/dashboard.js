@@ -46,8 +46,33 @@ window.addEventListener("DOMContentLoaded", async () => {
             headers: { Authorization: token }
         });
 
-        localStorage.setItem("user", JSON.stringify(await response.json()));
+        const data = await response.json();
+        const user = data.user;
+        const global = data.global;
+
+        const textarea = document.querySelector("textarea");
+        textarea.value = global.word;
+
+        if (user.admin) {
+            textarea.readOnly = false;
+            textarea.onchange = async () => {
+                global.word = textarea.value;
+                await fetch("http://localhost:5000/api/update_global", {
+                    method: "POST",
+                    body: JSON.stringify({ global }),
+                    headers: {
+                        "Authorization": token,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                });
+            }
+        }
+
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("global", JSON.stringify(global));
     } catch (err) {
         console.error(err);
     }
+
 });

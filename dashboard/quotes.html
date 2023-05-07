@@ -7,6 +7,7 @@
         <link href="../styles/global.css" rel="stylesheet">
         <link href="../styles/quotes.css" rel="stylesheet">
         <script type="module" src="../scripts/quotes.js" defer></script>
+        <script type="module" src="../scripts/admin_only.js" defer></script>
     </head>
     <body>
         <img src="../images/background.png" class="background unselectable">
@@ -20,7 +21,7 @@
         <div class="title">QUOTES</div>
         <div class="main">
             <img src="../images/happy_emoji.jpg" class="selected-image invisible">
-            <button type="button" class="add invisible material-icons"></button>
+            <button type="button" class="add invisible material-icons admin-only"></button>
             <form method="post">
                 <textarea name="text" required></textarea>
                 <button type="submit">Add</button>
@@ -31,6 +32,7 @@
                 <button onclick="select(1)"><img class="unselectable" src="../images/sad_emoji.jpg"></button>
                 <button onclick="select(2)"><img class="unselectable" src="../images/angry_emoji.jpg"></button>
                 <button onclick="select(3)"><img class="unselectable" src="../images/neutral_emoji.jpg"></button>
+                <button onclick="select(4)"><img class="unselectable" src="../images/nervous_emoji.jpg"></button>
             </div>
             <div class="content">Please Choose</div>
             <div class="container invisible"></div>

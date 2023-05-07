@@ -70,6 +70,18 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         document.querySelectorAll("button.play").forEach(button => {
             button.onclick = async () => {
+                await fetch("http://localhost:5000/api/add_view", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: button.dataset.id,
+                        type: "Music",
+                    })
+                });
+
                 source.pause();
                 source.src = button.dataset.src;
                 source.play();

@@ -33,13 +33,14 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 const quoteSchema = new mongoose.Schema({
     text: { type: String, required: true },
-    emotion: { type: Number, required: true }
+    emotion: { type: Number, required: true },
+    views: { type: Number, default: 0 },
 });
 
 const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    admin: { type: Boolean, default: false }
+    admin: { type: Boolean, default: false },
 });
 
 const musicSchema = new mongoose.Schema({
@@ -47,6 +48,7 @@ const musicSchema = new mongoose.Schema({
     title: { type: String, required: true },
     duration: { type: Number, required: true },
     url: { type: String, required: true },
+    views: { type: Number, default: 0 },
 });
 
 const videoSchema = new mongoose.Schema({
@@ -55,10 +57,22 @@ const videoSchema = new mongoose.Schema({
     duration: { type: Number, required: true },
     videoId: { type: String, required: true },
     thumbnail: { type: String, required: true },
+    views: { type: Number, default: 0 },
 });
 
 const imageSchema = new mongoose.Schema({
     data: Buffer
+});
+
+const globalSchema = new mongoose.Schema({
+    emoticonCount: {
+        happy: Number,
+        sad: Number,
+        angry: Number,
+        neutral: Number,
+        nervous: Number,
+    },
+    word: String,
 });
 
 const Quote = mongoose.model("Quote", quoteSchema);
@@ -66,6 +80,7 @@ const User = mongoose.model("User", userSchema);
 const Image = mongoose.model("Image", imageSchema);
 const Music = mongoose.model("Music", musicSchema);
 const Video = mongoose.model("Video", videoSchema);
+const Global = mongoose.model("Global", globalSchema);
 
 app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
@@ -174,6 +189,31 @@ app.post("/api/add_music", async (req, res) => {
     }
 });
 
+app.post("/api/update_global", async (req, res) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: "Authorization token missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded.admin) {
+            return res.status(403).json({ error: "Invalid authorization token" });
+        }
+
+        await Global.deleteOne({});
+        const global = new Global(req.body.global);
+
+        await global.save();
+        res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(401).json({ error: "Invalid authorization token" });
+    }
+});
+
 app.post("/api/add_video", async (req, res) => {
     const token = req.headers.authorization;
 
@@ -233,6 +273,31 @@ app.post("/api/add_pamphlet", upload.single("image"), async (req, res) => {
         console.log(err);
         res.status(401).json({ error: "Invalid authorization token" });
     }
+});
+
+app.post("/api/add_view", async (req, res) => {
+
+    if (req.body.type == "Quote") {
+        const quote = await Quote.findOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+        quote.views = (quote.views ?? 0);
+        quote.views += 1;
+
+        await quote.save();
+    } else if (req.body.type == "Video") {
+        const video = await Video.findOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+        video.views = (video.views ?? 0);
+        video.views += 1;
+
+        await video.save();
+    } else if (req.body.type == "Music") {
+        const music = await Music.findOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+        music.views = (music.views ?? 0);
+        music.views += 1;
+
+        await music.save();
+    }
+
+    res.json({ success: true });
 });
 
 app.get("/api/list_videos", async (_, res) => {
@@ -310,8 +375,24 @@ app.get("/api/me", async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ username: decoded.username });
+        let global = await Global.findOne({});
 
-        res.json({ success: true, user });
+        if (!global) {
+            global = new Global({
+                word: "I-WORD",
+                emoticonCount: {
+                    happy: 0,
+                    sad: 0,
+                    angry: 0,
+                    neutral: 0,
+                    nervous: 0,
+                },
+            });
+
+            await global.save();
+        }
+
+        res.json({ success: true, user, global });
     } catch (err) {
         console.log(token);
         res.status(401).json({ error: "Invalid authorization token" });

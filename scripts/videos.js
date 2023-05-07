@@ -44,6 +44,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             const play = document.createElement("button");
             const del = document.createElement("button");
 
+            play.dataset.id = video._id;
             play.dataset.src = `https://www.youtube.com/embed/${video.videoId}`;
             play.classList.add("play");
             del.textContent = "";
@@ -68,9 +69,21 @@ window.addEventListener("DOMContentLoaded", async () => {
             container.appendChild(div);
 
             document.querySelectorAll("button.play").forEach(button => {
-                button.addEventListener("click", () => {
+                button.addEventListener("click", async () => {
                     source.src = button.dataset.src;
-                    source.play();
+
+                    await fetch("http://localhost:5000/api/add_view", {
+                        method: "POST",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            id: button.dataset.id,
+                            type: "Video",
+                        })
+                    });
+
                 });
             });
 
