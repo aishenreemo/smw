@@ -11,7 +11,8 @@ document.getElementById("logout").addEventListener("click", async () => {
 
         if (response.ok) {
             localStorage.removeItem("token");
-            localStorage.removeItem("data");
+            localStorage.removeItem("user");
+            localStorage.removeItem("global");
             window.location.href = "/index.html";
         } else {
             const data = await response.json();
@@ -67,7 +68,13 @@ window.addEventListener("DOMContentLoaded", async () => {
                     },
                 });
             }
+        } else {
+            document.querySelectorAll(".admin-only").forEach(element => {
+                element.classList.add("invisible");
+                element.style.display = "none";
+            })
         }
+
 
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("global", JSON.stringify(global));

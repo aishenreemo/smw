@@ -76,7 +76,7 @@ window.select = async (imgIndex) => {
     img.src = `../images/${emotion}_emoji.jpg`;
     img.classList.remove("invisible");
 
-    if (!user.admin) {
+    if (user.admin) {
         button.classList.remove("invisible");
     }
 

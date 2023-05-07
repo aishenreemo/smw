@@ -34,6 +34,14 @@ form.addEventListener("submit", async (event) => {
 
 window.addEventListener("DOMContentLoaded", async () => {
     try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user.admin) {
+            document.querySelectorAll(".admin-only").forEach(element => {
+                element.classList.add("invisible");
+                element.style.display = "none";
+            });
+        }
+
         const response = await fetch("http://localhost:5000/api/list_musics");
         const data = (await response.json());
 

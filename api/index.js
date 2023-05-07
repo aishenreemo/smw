@@ -198,14 +198,14 @@ app.post("/api/update_global", async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findOne({ username: decoded.username });
 
-        if (!decoded.admin) {
-            return res.status(403).json({ error: "Invalid authorization token" });
+        if (!user) {
+            return res.status(401).json({ error: "Invalid username or password" });
         }
 
         await Global.deleteOne({});
         const global = new Global(req.body.global);
-
         await global.save();
         res.json({ success: true });
     } catch (err) {
