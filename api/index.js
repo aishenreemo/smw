@@ -279,7 +279,7 @@ app.post("/api/add_view", async (req, res) => {
 
     if (req.body.type == "Quote") {
         const quote = await Quote.findOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
-        quote.views = (quote.views ?? 0);
+        quote.views = (quote.views || 0);
         quote.views += 1;
 
         await quote.save();
