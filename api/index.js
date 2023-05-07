@@ -322,6 +322,36 @@ app.get("/api/list_quotes/:emotion", async (req, res) => {
     res.json(await Quote.find({ emotion }));
 });
 
+app.get("/api/search/:string", async (req, res) => {
+    res.json({
+        quotes: await Quote.find({ text: { $regex: req.params.string, $options: "i" } }),
+        musics: await Music.find({ title: { $regex: req.params.string, $options: "i" } }),
+        videos: await Video.find({ title: { $regex: req.params.string, $options: "i" } }),
+    });
+});
+
+app.get("/api/most_viewed", async (_, res) => {
+    const global = await Global.findOne({});
+    const list = Object.values(global.emoticonCount);
+
+    let maxIndex = 0;
+    let maxValue = list[0];
+
+    for (let i = 1; i < list.length; i++) {
+        if (list[i] > maxValue) {
+            maxValue = list[i];
+            maxIndex = i;
+        }
+    }
+
+    res.json({
+        quote: await Quote.findOne({}).sort({ views: -1 }).exec(),
+        music: await Music.findOne({}).sort({ views: -1 }).exec(),
+        video: await Video.findOne({}).sort({ views: -1 }).exec(),
+        emoticon: maxIndex,
+    });
+});
+
 app.post("/api/delete_quote", async (req, res) => {
     await Quote.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
     res.send({ success: true });

@@ -59,6 +59,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             del.textContent = "";
             del.dataset.id = music._id;
             del.classList.add("delete");
+            del.classList.add("admin-only");
 
             for (const button of [play, del]) {
                 button.classList.add("material-icons");

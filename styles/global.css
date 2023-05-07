@@ -162,3 +162,7 @@ audio::-webkit-media-controls-time-remaining-display {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #555;
 }
+
+td {
+    word-wrap: break-word;
+}

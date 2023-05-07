@@ -35,12 +35,6 @@ form.addEventListener("submit", async (event) => {
 window.addEventListener("DOMContentLoaded", async () => {
     try {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (!user.admin) {
-            document.querySelectorAll(".admin-only").forEach(element => {
-                element.classList.add("invisible");
-                element.style.display = "none";
-            });
-        }
 
         const response = await fetch("http://localhost:5000/api/list_videos");
         const data = await response.json();
@@ -58,6 +52,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             del.textContent = "";
             del.dataset.id = video._id;
             del.classList.add("delete");
+            del.classList.add("admin-only");
             del.classList.add("material-icons");
 
             const thumbnail = document.createElement("img");
@@ -75,39 +70,46 @@ window.addEventListener("DOMContentLoaded", async () => {
             div.appendChild(child);
             div.appendChild(del);
             container.appendChild(div);
+        }
 
-            document.querySelectorAll("button.play").forEach(button => {
-                button.addEventListener("click", async () => {
-                    source.src = button.dataset.src;
+        document.querySelectorAll("button.play").forEach(button => {
+            button.addEventListener("click", async () => {
+                source.src = button.dataset.src;
 
-                    await fetch("http://localhost:5000/api/add_view", {
-                        method: "POST",
-                        headers: {
-                            "Accept": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            id: button.dataset.id,
-                            type: "Video",
-                        })
-                    });
-
+                await fetch("http://localhost:5000/api/add_view", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: button.dataset.id,
+                        type: "Video",
+                    })
                 });
+
             });
+        });
 
-            document.querySelectorAll("button.delete").forEach(button => {
-                button.addEventListener("click", async () => {
-                    await fetch("http://localhost:5000/api/delete_video", {
-                        method: "POST",
-                        headers: {
-                            "Accept": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ id: button.dataset.id }),
-                    });
-
-                    window.location.href = "videos.html";
+        document.querySelectorAll("button.delete").forEach(button => {
+            button.addEventListener("click", async () => {
+                await fetch("http://localhost:5000/api/delete_video", {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ id: button.dataset.id }),
                 });
+
+                window.location.href = "videos.html";
+            });
+        });
+
+        if (!user.admin) {
+            document.querySelectorAll(".admin-only").forEach(element => {
+                element.classList.add("invisible");
+                element.style.display = "none";
             });
         }
     } catch (err) {

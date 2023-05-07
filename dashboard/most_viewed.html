@@ -11,7 +11,26 @@
     <body>
         <img src="../images/background.png" class="background unselectable">
         <div class="home"><div><button type="button" class="material-icons" onclick="window.location.href = 'index.html'"></button></div></div>
+        <div class="search">
+            <input type="search" placeholder="search for anything">
+            <button type="button" onclick="search()" class="material-icons"></button>
+        </div>
         <div class="title">MOST VIEWED CONTENT</div>
-        <div class="container"></div>
+        <div class="container">
+            <table>
+                <tr>
+                    <th>QUOTE</th>
+                    <th>MUSIC</th>
+                    <th>VIDEO</th>
+                    <th>EMOTICON</th>
+                </tr>
+                <tr>
+                    <td id="quote"></td>
+                    <td id="music"></td>
+                    <td id="video"></td>
+                    <td id="emoticon"></td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

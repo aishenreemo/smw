@@ -124,6 +124,7 @@ window.select = async (imgIndex) => {
         const del = document.createElement("button");
         del.textContent = '';
         del.classList.add("material-icons");
+        del.classList.add("admin-only");
         del.onclick = generateDeleteListener(quote._id);
 
         div.appendChild(child);
