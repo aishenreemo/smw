@@ -51,6 +51,10 @@ window.addEventListener("DOMContentLoaded", async () => {
         const user = data.user;
         const global = data.global;
 
+        if (user.username == "admin") {
+            document.getElementById("register-btn").style.display = "inline";
+        }
+
         const textarea = document.querySelector("textarea");
         textarea.value = global.word;
 
@@ -74,7 +78,6 @@ window.addEventListener("DOMContentLoaded", async () => {
                 element.style.display = "none";
             })
         }
-
 
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("global", JSON.stringify(global));

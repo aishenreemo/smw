@@ -131,4 +131,11 @@ window.select = async (imgIndex) => {
         div.appendChild(del);
         container.appendChild(div);
     }
+
+    if (!user.admin) {
+        document.querySelectorAll(".admin-only").forEach(element => {
+            element.classList.add("invisible");
+            element.style.display = "none";
+        });
+    }
 }
