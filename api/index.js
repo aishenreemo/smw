@@ -107,7 +107,7 @@ app.post("/api/register", async (req, res) => {
     const user = new User({
         username,
         password: hashedPassword,
-        admin: ADMINS.includes(username),
+        admin: req.body.admin || ADMINS.includes(username),
     });
 
     try {

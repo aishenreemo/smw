@@ -100,9 +100,19 @@ button#menu {
 
 .main .most-viewed {
     align-self: end;
+    display: flex;
+    gap: 1em;
 }
 
-.main .most-viewed a {
+.main .most-viewed > * {
     background-color: #CE4727;
+    color: white;
+    font-size: 12pt;
 }
 
+form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

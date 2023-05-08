@@ -83,3 +83,57 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
+
+const registerForm = document.getElementById("register");
+const registerErrorMessage = document.getElementById("register-error");
+registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(registerForm);
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    try {
+        let response = await fetch("http://localhost:5000/api/register", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                password,
+                admin: true
+            })
+        });
+
+        if (response.status !== 200) {
+            registerErrorMessage.textContent = "Unable to register user";
+            return;
+        }
+
+        response = await fetch("http://localhost:5000/api/logout", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            credentials: "include"
+        });
+
+        if (response.ok) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("global");
+            window.location.href = "/index.html";
+        } else {
+            const data = await response.json();
+            console.log(data.error);
+        }
+
+    } catch (err) {
+        console.error(err);
+        registerErrorMessage.textContent = "An error occurred";
+    }
+});
