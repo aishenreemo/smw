@@ -72,6 +72,9 @@ window.addEventListener("DOMContentLoaded", async () => {
             container.appendChild(div);
         }
 
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("v");
+
         document.querySelectorAll("button.play").forEach(button => {
             button.addEventListener("click", async () => {
                 source.src = button.dataset.src;
@@ -88,7 +91,10 @@ window.addEventListener("DOMContentLoaded", async () => {
                     })
                 });
 
+                source.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
             });
+
+            if (button.dataset.id == id) button.click();
         });
 
         document.querySelectorAll("button.delete").forEach(button => {
@@ -104,6 +110,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
                 window.location.href = "videos.html";
             });
+
         });
 
         if (!user.admin) {

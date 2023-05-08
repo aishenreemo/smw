@@ -80,14 +80,102 @@ async function searchStuff() {
     container.appendChild(div);
 
     for (const music of data.musics) {
+        const div = document.createElement("div");
+        div.classList.add("music");
+
+        const play = document.createElement("button");
+        const del = document.createElement("button");
+
+        play.textContent = "";
+        play.dataset.src = music.url;
+        play.dataset.id = music._id;
+        play.classList.add("play");
+        play.onclick = () => window.location.href = `/dashboard/musics.html?v=${play.dataset.id}`;
+        del.textContent = "";
+        del.dataset.id = music._id;
+        del.classList.add("delete");
+        del.classList.add("admin-only");
+
+        for (const button of [play, del]) {
+            button.classList.add("material-icons");
+        }
+
+        const child = document.createElement("a");
+        child.innerText = `${music.title} (${formatDuration(music.duration)})`;
+        child.classList.add("title");
+        child.href = music.link;
+        child.target = "_blank";
+
+        div.appendChild(play);
+        div.appendChild(child);
+        div.appendChild(del);
+        container.appendChild(div);
     }
 
     div = document.createElement("div");
     div.textContent = "VIDEOS";
     div.classList.add("title");
+    container.appendChild(div);
 
-    for (const videos of data.videos) {
+    for (const video of data.videos) {
+        const div = document.createElement("div");
+        div.classList.add("video");
+
+        const play = document.createElement("button");
+        const del = document.createElement("button");
+
+        play.dataset.id = video._id;
+        play.dataset.src = `https://www.youtube.com/embed/${video.videoId}`;
+        play.classList.add("play");
+        play.onclick = () => window.location.href = `/dashboard/videos.html?v=${play.dataset.id}`;
+        del.textContent = "";
+        del.dataset.id = video._id;
+        del.classList.add("delete");
+        del.classList.add("admin-only");
+        del.classList.add("material-icons");
+
+        const thumbnail = document.createElement("img");
+        thumbnail.src = video.thumbnail;
+
+        play.appendChild(thumbnail);
+
+        const child = document.createElement("a");
+        child.innerText = `${video.title} (${formatDuration(video.duration)})`;
+        child.classList.add("title");
+        child.href = video.link;
+        child.target = "_blank";
+
+        div.appendChild(play);
+        div.appendChild(child);
+        div.appendChild(del);
+        container.appendChild(div);
+    }
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user.admin) {
+        document.querySelectorAll(".admin-only").forEach(element => {
+            element.classList.add("invisible");
+            element.style.display = "none";
+        });
     }
 }
 
 searchStuff();
+
+function formatDuration(duration) {
+    let hours = Math.floor(duration / 3600);
+    let minutes = Math.floor((duration % 3600) / 60);
+    let seconds = duration % 60;
+
+    if (hours < 10) {
+        hours = '0' + hours;
+    }
+    if (minutes < 10) {
+        minutes = '0' + minutes;
+    }
+    if (seconds < 10) {
+        seconds = '0' + seconds;
+    }
+
+    return `${hours}:${minutes}:${seconds}`;
+}

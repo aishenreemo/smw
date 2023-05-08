@@ -77,6 +77,9 @@ window.addEventListener("DOMContentLoaded", async () => {
             container.appendChild(div);
         }
 
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("v");
+
         document.querySelectorAll("button.play").forEach(button => {
             button.onclick = async () => {
                 await fetch("http://localhost:5000/api/add_view", {
@@ -112,6 +115,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 
                 }).catch(_ => {});
             };
+
+            if (button.dataset.id == id) button.click();
         });
 
         document.querySelectorAll("button.delete").forEach(button => {
@@ -128,12 +133,13 @@ window.addEventListener("DOMContentLoaded", async () => {
                 window.location.href = "musics.html";
             });
         });
+
+
     } catch (err) {
         console.error(err);
     }
 
 });
-
 
 function formatDuration(duration) {
     let hours = Math.floor(duration / 3600);

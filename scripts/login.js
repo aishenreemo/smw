@@ -33,3 +33,31 @@ loginForm.addEventListener("submit", async (event) => {
     }
 });
 
+document.getElementById("guest").addEventListener("click", async () => {
+    try {
+        const response = await fetch(`http://localhost:5000/api/login`, {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: "viewer",
+                password: "123",
+            }),
+            credentials: "include"
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("token", data.token);
+            window.location.href = "/dashboard/index.html";
+        } else {
+            const data = await response.json();
+            loginErrorMessage.textContent = data.error;
+        }
+    } catch (err) {
+        console.error(err);
+        loginErrorMessage.textContent = "An error occurred";
+    }
+});

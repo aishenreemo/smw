@@ -15,7 +15,7 @@ document.getElementById("prev").addEventListener("click", async () => {
     const fetchedJson = await fetchedImage.json();
     const imageData = fetchedJson.data.data;
     image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData)}`;
-    image.dataset.id = imageData._id;
+    image.dataset.id = fetchedJson._id;
 });
 
 document.getElementById("next").addEventListener("click", async () => {
@@ -28,11 +28,12 @@ document.getElementById("next").addEventListener("click", async () => {
     const fetchedJson = await fetchedImage.json();
     const imageData = fetchedJson.data.data;
     image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData)}`;
-    image.dataset.id = imageData._id;
+    image.dataset.id = fetchedJson._id;
 });
 
 document.getElementById("delete").addEventListener("click", async () => {
     if (!image.dataset.id) return;
+    console.log(image.dataset);
 
     await fetch("http://localhost:5000/api/delete_pamphlet", {
         method: "POST",
@@ -88,7 +89,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         const fetchedJson = await fetchedImage.json();
         const imageData = fetchedJson.data.data;
         image.src = `data:image/jpeg;base64,${arrayBufferToBase64(imageData)}`;
-        image.dataset.id = imageData._id;
+        image.dataset.id = fetchedJson._id;
     } catch (err) {
         console.error(err);
     }
