@@ -132,7 +132,7 @@ audio::-webkit-media-controls-time-remaining-display {
 }
 
 .background {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     height: 100%;
@@ -148,7 +148,6 @@ audio::-webkit-media-controls-time-remaining-display {
 /* track (background) of scrollbar */
 ::-webkit-scrollbar-track {
     background-color: #0084FF;
-    border-radius: 0.5em;
 }
 
 /* thumb (handle) of scrollbar */

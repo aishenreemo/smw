@@ -37,6 +37,10 @@ const quoteSchema = new mongoose.Schema({
     views: { type: Number, default: 0 },
 });
 
+const wordSchema = new mongoose.Schema({
+    text: { type: String, required: true },
+});
+
 const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
@@ -72,9 +76,9 @@ const globalSchema = new mongoose.Schema({
         neutral: Number,
         nervous: Number,
     },
-    word: String,
 });
 
+const Word = mongoose.model("Word", wordSchema);
 const Quote = mongoose.model("Quote", quoteSchema);
 const User = mongoose.model("User", userSchema);
 const Image = mongoose.model("Image", imageSchema);
@@ -148,6 +152,31 @@ app.post("/api/add_quote", async (req, res) => {
         });
 
         await quote.save();
+        res.json({ success: true });
+    } catch (err) {
+        console.log(err);
+        res.status(401).json({ error: "Invalid authorization token" });
+    }
+});
+
+app.post("/api/add_word", async (req, res) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: "Authorization token missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded.admin) {
+            return res.status(403).json({ error: "Invalid authorization token" });
+        }
+
+        const { text } = req.body;
+        const word = new Word({ text });
+
+        await word.save();
         res.json({ success: true });
     } catch (err) {
         console.log(err);
@@ -316,6 +345,10 @@ app.get("/api/count_pamphlets", async (_, res) => {
     res.json(await Image.countDocuments());
 });
 
+app.get("/api/list_words", async (_, res) => {
+    res.json(await Word.find({}));
+});
+
 app.get("/api/list_quotes/:emotion", async (req, res) => {
     const emotion = req.params.emotion;
 
@@ -354,6 +387,11 @@ app.get("/api/most_viewed", async (_, res) => {
 
 app.post("/api/delete_quote", async (req, res) => {
     await Quote.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
+    res.send({ success: true });
+});
+
+app.post("/api/delete_word", async (req, res) => {
+    await Word.deleteOne({ _id: new mongoose.Types.ObjectId(req.body.id) });
     res.send({ success: true });
 });
 

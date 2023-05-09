@@ -33,7 +33,7 @@
                 MOTIVATIONAL CRAFT
             </div>
             <div class="content">
-                <textarea readonly>"I-WORD"</textarea>
+                <button type="button" class="add admin-only material-icons"></button>
             </div>
             <div class="most-viewed admin-only">
                 <button id="register-btn" style="display: none;" onclick="document.getElementById('register').style.display = 'flex';">Register an Admin</button>
@@ -45,6 +45,11 @@
                 <div><input type="text" name="username" placeholder="Username" required></div>
                 <div><input type="password" name="password" placeholder="Password" required></div>
                 <div class="button-div"><button type="submit">Register</button></div>
+            </form>
+            <form id="i-word" class="form" method="post" style="display: none">
+                <h2>ADD I-WORD</h2>
+                <textarea placeholder="I-WORD" name="text" required></textarea>
+                <div class="button-div"><button type="submit">Add</button></div>
             </form>
         </div>
     </body>

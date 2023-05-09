@@ -27,11 +27,22 @@ body {
 /* Style the input fields */
 .form input {
     width: 100%;
+}
+
+.form input,
+.form textarea {
+    width: 100%;
     padding: 10px;
     margin-bottom: 0.5em;
     border: 2px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: white;
+    resize: none;
+}
+
+.form textarea {
+    height: 100%;
 }
 
 .form > .button-div {
@@ -44,8 +55,8 @@ body {
     cursor: pointer;
     padding: 0.5em;
     margin-bottom: 0.5em;
-    width: 120%;
-    transform: translateX(-10%);
+    width: 100%;
+    transform: translateY(-10%);
 }
 
 /* Style the submit button */
