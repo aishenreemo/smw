@@ -61,3 +61,12 @@ document.getElementById("guest").addEventListener("click", async () => {
         loginErrorMessage.textContent = "An error occurred";
     }
 });
+
+window.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        window.location.href = "/dashboard";
+        return;
+    }
+})
