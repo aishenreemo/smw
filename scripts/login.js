@@ -33,7 +33,17 @@ loginForm.addEventListener("submit", async (event) => {
     }
 });
 
-document.getElementById("guest").addEventListener("click", async () => {
+window.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        window.location.href = "/dashboard";
+        return;
+    }
+
+    const admin = new URLSearchParams(window.location.search)?.get("admin");
+    if (admin == "1") return;
+
     try {
         const response = await fetch(`http://localhost:5000/api/login`, {
             method: "POST",
@@ -51,22 +61,10 @@ document.getElementById("guest").addEventListener("click", async () => {
         if (response.ok) {
             const data = await response.json();
             localStorage.setItem("token", data.token);
-            window.location.href = "/dashboard/index.html";
-        } else {
-            const data = await response.json();
-            loginErrorMessage.textContent = data.error;
+            window.location.href = "/dashboard";
         }
     } catch (err) {
         console.error(err);
         loginErrorMessage.textContent = "An error occurred";
-    }
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-        window.location.href = "/dashboard";
-        return;
     }
 })

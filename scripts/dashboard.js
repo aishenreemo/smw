@@ -10,10 +10,11 @@ document.getElementById("logout").addEventListener("click", async () => {
         });
 
         if (response.ok) {
+            const user = JSON.parse(localStorage.getItem("user"));
+            window.location.href = user.admin ? "/" : "/?admin=1";
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             localStorage.removeItem("global");
-            window.location.href = "/index.html";
         } else {
             const data = await response.json();
             console.log(data.error);
@@ -57,6 +58,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
 
         if (!user.admin) {
+            document.getElementById("logout").innerText = "Login as Admin";
             document.querySelectorAll(".admin-only").forEach(element => {
                 element.classList.add("invisible");
                 element.style.display = "none";
