@@ -143,3 +143,14 @@ function formatDuration(duration) {
 
     return `${hours}:${minutes}:${seconds}`;
 }
+
+const content = document.querySelector(".list");
+const up = document.querySelector(".up");
+
+up.addEventListener("click", () => {
+    content.scrollTop = 0;
+});
+
+content.addEventListener("scroll", () => {
+    up.style.display = content.scrollTop == 0 ? "none" : "inline";
+});

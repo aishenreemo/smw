@@ -150,3 +150,10 @@ footer {
     color: white;
     font-weight: bold;
 }
+
+.up {
+    position: absolute;
+    width: 3% !important;
+    top: 37%;
+    left: 91.5%;
+}

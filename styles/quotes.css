@@ -151,3 +151,10 @@ body {
     height: 100%;
     padding: 1em;
 }
+
+.up {
+    position: absolute;
+    width: 3% !important;
+    top: 37%;
+    left: 85%;
+}

@@ -117,3 +117,10 @@ form {
     align-self: center;
     font-size: 20pt;
 }
+
+.up {
+    position: absolute;
+    width: 2% !important;
+    top: 37%;
+    left: 93.5%;
+}

@@ -139,3 +139,14 @@ window.select = async (imgIndex) => {
         });
     }
 }
+
+const content = document.querySelector(".container");
+const up = document.querySelector(".up");
+
+up.addEventListener("click", () => {
+    content.scrollTop = 0;
+});
+
+content.addEventListener("scroll", () => {
+    up.style.display = content.scrollTop == 0 ? "none" : "inline";
+});

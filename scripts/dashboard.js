@@ -200,3 +200,14 @@ addForm.addEventListener("submit", async (event) => {
 document.querySelector(".add").addEventListener("click", () => {
     addForm.style.display = "flex";
 });
+
+const content = document.querySelector(".content");
+const up = document.querySelector(".up");
+
+up.addEventListener("click", () => {
+    content.scrollTop = 0;
+});
+
+content.addEventListener("scroll", () => {
+    up.style.display = content.scrollTop == 0 ? "none" : "inline";
+});
